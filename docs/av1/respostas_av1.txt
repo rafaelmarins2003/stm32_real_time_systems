@@ -1,0 +1,62 @@
+1)
+B
+
+2)
+C
+
+3)
+1. Ele não utiliza sistema operacional onde o próprio loop é o "escalonador".
+2. Utiliza uma ordem de execução sequencial, funções são chamadas sequencialmente em ordem fixa conforme aparecem no loop.
+3. Sem prioridades reais entre tarefas  todas as tarefas têm a mesma "prioridade" implícita, determinada apenas pela ordem de chamada.
+4. Tem um tempo de resposta imprevisivel, pois a latência depende da soma das tarefas executadas contidas em cada função do loop, então se eu tenho uma função que está na linha 5 do meu loop aonde as outras 4 tem outras funções que demoram 10 segundos cada para serem executadas, a minha quinta função, mesmo podendo rodar em 1 milésimo de segundo, vai rodar 1 vez a cada 40 segundos.
+5. Não existe um isolamento entre tarefas, uma função que trava paralisa todo o sistema.
+6. A escalabilidade é limitada, pois a cada funcionalidade, o loop cresce e o tempo de resposta e eventos piora, tendo uma função pesada podendo acabar com a performance de todas as outras.
+
+4)
+B
+
+5)
+A, C, D
+
+6)
+Os modos User e System usam o mesmo banco de registradores, sendo eles
+
+r0-r3 (Argumentos/scratch): São registradores de propósito geral, eles transportam argumentos de chamadas de função e valor de retorno (em r0 e r1) eles também não precisam ser preservados pela função chamada.
+r4-r11 (Variáveis locais): De propósito geral também, por convenção são preservados pela função chamada callee-saved, servindo para variaveis de longa duração dentro de funções
+r12 (IP): Propósito geral, usado como temporário pelo linker em chamadas entre módulos.
+r13 (SP): Aponta para o topo da pilha do programa corrente, onde são salvos variavéis locais.
+r14 (LR): Recebe o endereço de retorno quando uma sub-rotina é chamada com BL/BLX.
+r15 (PC): Contém o endereço da próxima instrução a ser buscada.
+CPSR (Current Program Status Register): Guarda as flags de certas condições, as máscaras de interrupção, o estado ARM e o modo de operação, em modo user o programa só pode alterar as flags.
+SPSR (Saved Program Status Register): Ele não existe nos modos de user e system. Só é disponibilizado nos modos de exceção.
+
+Diferença entre os dois modos: o user não pode alterar os bits de controle do CPSR nem acessar recursos privilegiados, o system é privilegiado e serve para rodar código do SO usando os registradores do usuário, sem risco de corromper o LR/SP dos modos de exceção.
+
+
+7)
+31:N, Negative, Setado quando o resultado da última operação (com flags) foi negativo.
+30:Z, Zero, Setado quando o resultado da última operação foi zero. Usado em comparações e desvios condicionais.
+29:C, Carry, Setado quando houve carry na soma, não houve empréstimo na subtração, ou pelo bit expulso em deslocamentos.
+28:V, Overflow, Setado quando houve estouro aritmético com sinal.
+27:Q, Saturation, (ARMv5TE+) Fica "grudado" em 1 quando uma instrução saturada satura ou estoura.
+24:J, Jazelle, Indica execução no estado Jazelle (bytecode Java), em núcleos com esse suporte.
+19–16:GE[3:0], Greater-or-Equal, (ARMv6) Flags por lane das instruções SIMD de 8/16 bits, usadas pela instrução `SEL`.
+9:E, Endianness (ARMv6), Define se os acessos a dados são little-endian (0) ou big-endian (1).
+8:A, Asynchronous abort disable (ARMv6), Quando 1, mascara os aborts de dados assíncronos (imprecisos).
+7:I, IRQ disable, Quando 1, desabilita as interrupções IRQ.
+6:F, FIQ disable, Quando 1, desabilita as interrupções rápidas FIQ.
+5:T, Thumb state, 1 = CPU executando instruções Thumb (16 bits); 0 = estado ARM (32 bits). Alterado por `BX`/`BLX`.
+4–0:M[4:0], Mode bits, Definem o modo de processamento atual.
+
+
+8)
+F,V,F,F,F,V,F,V,F,V
+
+9)
+Cortex-A: prioriza desempenho e riqueza de software (S.O. completo com memória virtual); não é determinístico.
+Cortex-R: prioriza previsibilidade temporal e confiabilidade em sistemas críticos que ainda exigem muito desempenho.
+Cortex-M: prioriza custo, simplicidade, eficiência energética e latência de interrupção baixa em sistemas embarcados de pequeno porte.
+
+10)
+A)O pipeline é uma técnica de organização do processador que divide a execução de uma instrução em vários estágios independentes, cada um executado por um bloco de hardware dedicado.
+B)A memória cache existe para reduzir o "gargalo" entre a CPU, que executa instruções em poucos nanossegundos, e a memória principal (DRAM ou Flash), cujo tempo de acesso é dezenas de vezes maior. Ela é uma memória pequena e muito rápida, colocada entre o núcleo e a memória principal, que guarda cópias temporárias das instruções e dados usados recentemente ou com maior frequência.
