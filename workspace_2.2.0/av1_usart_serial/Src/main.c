@@ -1,10 +1,3 @@
-/**
- ******************************************************************************
- * @file           : main.c
- * @brief          : AV1 STR - UART1 + toggle LED (PC10) + leitura ADC1 CH1 em Volts
- ******************************************************************************
- */
-
 #include <stdio.h>
 #include <stdint.h>
 #include "stm32f4xx.h"
